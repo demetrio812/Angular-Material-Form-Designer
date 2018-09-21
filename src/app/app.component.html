@@ -27,7 +27,11 @@
       <mat-toolbar>
         <span>Form components</span>
       </mat-toolbar>
-      Form components
+
+      <div fxLayout="column">
+        <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components">{{component.name}}</button>
+      </div>
+
     </mat-sidenav>
     <mat-sidenav #endnav opened mode="side" position="end">
       <mat-toolbar>
@@ -42,11 +46,15 @@
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
-        <span fxFlex>Form components</span>
+        <span fxFlex>Form layout</span>
         <button mat-icon-button (click)="endnav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
       </mat-toolbar>
+
+      <div>
+        <pre>{{formLayout | json}}</pre>
+      </div>
     </mat-sidenav-content>
 
   </mat-sidenav-container>

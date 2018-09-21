@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule, MatCardModule, MatIconModule, MatMenuModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {EditorService} from './editor.service';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatCardModule,
     MatButtonModule
   ],
-  providers: [],
+  providers: [EditorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
