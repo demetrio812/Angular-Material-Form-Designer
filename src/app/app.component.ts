@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {EditorService} from './editor.service';
 import {FormComponent} from './model';
+import {ConverterService} from './converter.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +14,17 @@ export class AppComponent {
   formLayout: Array<FormComponent> = [];
   selectedComponent: FormComponent = null;
 
-  constructor(public editorService: EditorService) {
+  constructor(public editorService: EditorService,
+              public converterService: ConverterService) {
 
   }
 
   addComponent(component: FormComponent) {
-    this.formLayout.push(component);
-    this.selectComponent(component);
+    const clonedComponent = _.cloneDeep(component);
+    this.formLayout.push(clonedComponent);
+    this.selectComponent(clonedComponent);
+
+    this.converterService.convert(this.formLayout);
   }
 
   selectComponent(component: FormComponent) {
@@ -28,4 +34,5 @@ export class AppComponent {
   deselectComponent() {
     this.selectedComponent = null;
   }
+
 }

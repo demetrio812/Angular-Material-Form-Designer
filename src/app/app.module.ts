@@ -3,9 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule, MatCardModule, MatIconModule, MatMenuModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatDividerModule,
+  MatIconModule,
+  MatMenuModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {EditorService} from './editor.service';
+import {ConverterService} from './converter.service';
 
 @NgModule({
   declarations: [
@@ -20,9 +29,10 @@ import {EditorService} from './editor.service';
     MatIconModule,
     MatSidenavModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDividerModule
   ],
-  providers: [EditorService],
+  providers: [EditorService, ConverterService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
