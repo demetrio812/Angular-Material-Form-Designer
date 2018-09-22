@@ -29,6 +29,7 @@
       </mat-toolbar>
 
       <div fxLayout="column">
+        <button mat-button (click)="addRow()">Add Row</button>
         <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components">{{component.type}}</button>
       </div>
 
@@ -55,7 +56,9 @@
       <mat-tab-group>
         <mat-tab label="Preview">
 
-          <app-element-preview [element]="elem" *ngFor="let elem of formLayout"></app-element-preview>
+          <div [fxLayout]="row.flexLayout ? row.flexLayout : 'row wrap'" [fxLayoutAlign]="row.flexLayoutAlign ? row.flexLayoutAlign : 'space-around center'"  *ngFor="let row of formLayout">
+            <app-element-preview [element]="elem" *ngFor="let elem of row.components"></app-element-preview>
+          </div>
 
         </mat-tab>
         <mat-tab label="Code">

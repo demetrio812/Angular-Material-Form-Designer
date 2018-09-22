@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {EditorService} from './editor.service';
-import {FormComponent} from './model';
+import {FormComponent, FormRow} from './model';
 import {ConverterService} from './converter.service';
 import * as _ from 'lodash';
 
@@ -11,7 +11,8 @@ import * as _ from 'lodash';
 })
 export class AppComponent {
 
-  formLayout: Array<FormComponent> = [];
+  formLayout: Array<FormRow> = [];
+  selectedRow: FormRow = null;
   selectedComponent: FormComponent = null;
 
   constructor(public editorService: EditorService,
@@ -19,12 +20,23 @@ export class AppComponent {
 
   }
 
-  addComponent(component: FormComponent) {
-    const clonedComponent = _.cloneDeep(component);
-    this.formLayout.push(clonedComponent);
-    this.selectComponent(clonedComponent);
+  addRow() {
+    const row = {
+      flexLayout: 'row wrap',
+      components: []
+    };
+    this.formLayout.push(row);
+    this.selectedRow = row;
+  }
 
-    this.converterService.convert(this.formLayout);
+  addComponent(component: FormComponent) {
+    if (this.selectedRow) {
+      const clonedComponent = _.cloneDeep(component);
+      this.selectedRow.components.push(clonedComponent);
+      this.selectComponent(clonedComponent);
+
+      this.converterService.convert(this.formLayout);
+    }
   }
 
   selectComponent(component: FormComponent) {

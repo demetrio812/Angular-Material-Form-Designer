@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormComponent, FormInputComponent} from './model';
+import {FormComponent, FormInputComponent, FormRow} from './model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class ConverterService {
   constructor() {
   }
 
-  convert(formLayout: Array<FormComponent>) {
+  convert(formLayout: Array<FormRow>) {
     this._convertedTsCode = this.getTsCode(formLayout);
     this._convertedHtmlCode = this.getHtmlCode(formLayout);
   }
@@ -24,10 +24,12 @@ export class ConverterService {
     return this._convertedTsCode;
   }
 
-  private getTsCode(formLayout: Array<FormComponent>): string {
+  private getTsCode(formLayout: Array<FormRow>): string {
+    const components = this.getComponentsArray(formLayout);
+
     let code = '\nthis.myForm = this.fb.group({\n';
 
-    for (const component of formLayout) {
+    for (const component of components) {
       if ((<FormInputComponent>component).formBuilderCode) {
         code += '\n' + (<FormInputComponent>component).formBuilderCode(component) + '\n';
       }
@@ -35,7 +37,7 @@ export class ConverterService {
 
     code += '\n});\n\n';
 
-    for (const component of formLayout) {
+    for (const component of components) {
       if (component.extraCode) {
         code += '\n' + component.extraCode(component) + '\n';
       }
@@ -43,18 +45,32 @@ export class ConverterService {
     return code;
   }
 
-  private getHtmlCode(formLayout: Array<FormComponent>): string {
+  private getHtmlCode(formLayout: Array<FormRow>): string {
     let code = `\n<form [formGroup]=\'myForm\'>\n`;
 
-    for (const component of formLayout) {
-      if (component.htmlCode) {
-        code += '\n' + component.htmlCode(component) + '\n';
+    for (const row of formLayout) {
+      code += `\n<div fxLayout='${row.flexLayout ? row.flexLayout : 'row wrap'}' fxLayoutAlign='${row.flexLayoutAlign ? row.flexLayoutAlign : 'space-around center'}'>\n\n`;
+      for (const component of row.components) {
+        if (component.htmlCode) {
+          code += '\n' + component.htmlCode(component) + '\n';
+        }
       }
+      code += `\n</div>\n\n`;
     }
 
-    code += '\n<form>\n\n';
+    code += '\n</form>\n\n';
 
     return code;
   }
 
+  private getComponentsArray(formLayout: Array<FormRow>): Array<FormComponent> {
+    // get the entire list of components
+    const components: Array<FormComponent> = [];
+    for (const row of formLayout) {
+      for (const comp of row.components) {
+        components.push(comp);
+      }
+    }
+    return components;
+  }
 }

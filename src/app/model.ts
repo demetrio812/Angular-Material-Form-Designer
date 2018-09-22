@@ -1,8 +1,15 @@
 
+export interface FormRow {
+  flexLayout?: string;
+  flexLayoutAlign?: string;
+  components: Array<FormComponent>;
+}
+
 export interface FormComponent {
   type: string;
   name: string;
   text: string;
+  flex?: number;
 
   extraCode?: (ctx: FormComponent) => string;
   htmlCode?: (ctx: FormComponent) => string;

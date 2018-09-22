@@ -10,7 +10,7 @@ export class Config {
       return `${ctx.name}: '',`;
     },
     htmlCode: (ctx: FormComponent) => {
-      return `<mat-form-field>\n<input matInput placeholder="${ctx.name}" formControlName="${ctx.name}">\n</mat-form-field>`;
+      return `<mat-form-field>\n<input matInput placeholder="${ctx.text}" formControlName="${ctx.name}">\n</mat-form-field>`;
     },
   };
 
@@ -22,7 +22,7 @@ export class Config {
       return `${ctx.name}: '',`;
     },
     htmlCode: (ctx: FormComponent) => {
-      return `<mat-form-field>\n<textarea matInput placeholder="${ctx.name}" formControlName="${ctx.name}">\n</mat-form-field>`;
+      return `<mat-form-field>\n<textarea matInput placeholder="${ctx.text}" formControlName="${ctx.name}"></textarea>\n</mat-form-field>`;
     },
   };
 
@@ -34,7 +34,7 @@ export class Config {
       return `${ctx.name}: '',`;
     },
     htmlCode: (ctx: FormComponent) => {
-      return `<mat-form-field>\n<mat-select placeholder="${ctx.name}" formControlName="${ctx.name}"></mat-select>\n</mat-form-field>`;
+      return `<mat-form-field>\n<mat-select placeholder="${ctx.text}" formControlName="${ctx.name}"></mat-select>\n</mat-form-field>`;
     },
   };
 

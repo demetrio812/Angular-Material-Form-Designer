@@ -7,8 +7,8 @@ import {
   MatButtonModule,
   MatCardModule,
   MatDividerModule,
-  MatIconModule,
-  MatMenuModule,
+  MatIconModule, MatInputModule,
+  MatMenuModule, MatSelectModule,
   MatSidenavModule, MatTabsModule,
   MatToolbarModule
 } from '@angular/material';
@@ -37,7 +37,9 @@ import { ElementPreviewComponent } from './element-preview/element-preview.compo
     MatCardModule,
     MatButtonModule,
     MatDividerModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule,
+    MatInputModule
   ],
   providers: [EditorService, ConverterService],
   bootstrap: [AppComponent]
