@@ -9,28 +9,35 @@ import {
   MatDividerModule,
   MatIconModule,
   MatMenuModule,
-  MatSidenavModule,
+  MatSidenavModule, MatTabsModule,
   MatToolbarModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {EditorService} from './editor.service';
 import {ConverterService} from './converter.service';
+import {CovalentHighlightModule} from '@covalent/highlight';
+import {CovalentDynamicFormsModule} from '@covalent/dynamic-forms';
+import { ElementPreviewComponent } from './element-preview/element-preview.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ElementPreviewComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    CovalentHighlightModule,
+    CovalentDynamicFormsModule,
     MatToolbarModule,
     MatMenuModule,
     MatIconModule,
     MatSidenavModule,
     MatCardModule,
     MatButtonModule,
-    MatDividerModule
+    MatDividerModule,
+    MatTabsModule
   ],
   providers: [EditorService, ConverterService],
   bootstrap: [AppComponent]

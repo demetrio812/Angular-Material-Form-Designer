@@ -23,13 +23,13 @@
   </mat-menu>
 
   <mat-sidenav-container class="main-container">
-    <mat-sidenav #sidenav opened mode="side">
+    <mat-sidenav #sidenav opened mode="side" style="width: 150px">
       <mat-toolbar>
         <span>Form components</span>
       </mat-toolbar>
 
       <div fxLayout="column">
-        <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components">{{component.name}}</button>
+        <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components">{{component.type}}</button>
       </div>
 
     </mat-sidenav>
@@ -52,13 +52,24 @@
         </button>
       </mat-toolbar>
 
-      <div>
-        <pre>{{formLayout | json}}</pre>
-        <mat-divider></mat-divider>
-        <pre>{{converterService.convertedTsCode}}</pre>
-        <mat-divider></mat-divider>
-        <pre>{{converterService.convertedHtmlCode}}</pre>
-      </div>
+      <mat-tab-group>
+        <mat-tab label="Preview">
+
+          <app-element-preview [element]="elem" *ngFor="let elem of formLayout"></app-element-preview>
+
+        </mat-tab>
+        <mat-tab label="Code">
+          <div>
+            <td-highlight lang="json" [content]="formLayout | json"></td-highlight>
+            <mat-divider></mat-divider>
+            <td-highlight lang="typescript" [content]="converterService.convertedTsCode"></td-highlight>
+            <mat-divider></mat-divider>
+
+            <td-highlight lang="html" [content]="converterService.convertedHtmlCode"></td-highlight>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
     </mat-sidenav-content>
 
   </mat-sidenav-container>
