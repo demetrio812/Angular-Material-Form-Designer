@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {EditorService} from './editor.service';
 import {FormComponent, FormRow} from './model';
 import {ConverterService} from './converter.service';
@@ -16,47 +16,50 @@ export class AppComponent implements OnInit {
   selectedComponent: FormComponent = null;
 
   constructor(public editorService: EditorService,
-              public converterService: ConverterService) {
+              public converterService: ConverterService,
+              private changeDetectorRef: ChangeDetectorRef) {
 
   }
 
   ngOnInit(): void {
     // test
-    this.addRow();
-    this.addComponent(this.editorService.components[0]);
-    this.addComponent(this.editorService.components[0]);
-    this.addRow();
-    this.addComponent(this.editorService.components[2]);
-    this.addRow();
-    this.addComponent(this.editorService.components[1]);
-    this.addRow();
-    this.addComponent(this.editorService.components[3]);
+    const row = this.editorService.containers.get('flexRow');
+    this.addRow(row);
+    this.addComponent(this.editorService.components.get('input'));
+    this.addComponent(this.editorService.components.get('input'));
+    this.addRow(row);
+    this.addComponent(this.editorService.components.get('select'));
+    this.addRow(row);
+    this.addComponent(this.editorService.components.get('textarea'));
+    this.addRow(row);
+    this.addComponent(this.editorService.components.get('button'));
   }
 
-  addRow() {
-    const row = {
-      flexLayout: 'row wrap',
-      components: []
-    };
-    this.formLayout.push(row);
-    this.selectedRow = row;
+  addRow(row: FormRow) {
+    const clonedRow = _.cloneDeep(row);
+    this.formLayout.push(clonedRow);
+    this.selectedRow = clonedRow;
   }
 
   addComponent(component: FormComponent) {
     if (this.selectedRow) {
       const clonedComponent = _.cloneDeep(component);
       this.selectedRow.components.push(clonedComponent);
-      this.selectComponent(clonedComponent);
+      this.selectComponent(clonedComponent, this.selectedRow);
 
       this.converterService.convert(this.formLayout);
     }
   }
 
-  selectComponent(component: FormComponent) {
+  selectComponent(component: FormComponent, row: FormRow) {
+    this.selectedRow = row;
     this.selectedComponent = component;
+
+    this.changeDetectorRef.detectChanges();
   }
 
   deselectComponent() {
+    this.selectedRow = null;
     this.selectedComponent = null;
   }
 

@@ -1,5 +1,7 @@
 
 export interface FormRow {
+  type: string;
+  name: string;
   flexLayout?: string;
   flexLayoutAlign?: string;
   components: Array<FormComponent>;

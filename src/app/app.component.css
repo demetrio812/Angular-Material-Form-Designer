@@ -13,9 +13,11 @@
   border: 1px dotted #cccccc;
   padding: 8px;
   margin: 8px;
+  cursor: pointer;
 }
 
 .element-layout {
   border: 1px dashed #000000;
   padding: 8px;
+  cursor: pointer;
 }

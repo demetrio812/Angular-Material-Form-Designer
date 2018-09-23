@@ -10,7 +10,7 @@ import {
   MatIconModule, MatInputModule,
   MatMenuModule, MatSelectModule,
   MatSidenavModule, MatTabsModule,
-  MatToolbarModule
+  MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {EditorService} from './editor.service';
@@ -40,7 +40,8 @@ import { ElementPreviewComponent } from './element-preview/element-preview.compo
     MatTabsModule,
     MatSelectModule,
     MatInputModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule
   ],
   providers: [EditorService, ConverterService],
   bootstrap: [AppComponent]

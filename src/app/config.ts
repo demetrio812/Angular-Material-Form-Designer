@@ -1,8 +1,15 @@
-import {FormComponent, FormInputComponent} from './model';
+import {FormComponent, FormInputComponent, FormRow} from './model';
 
 export class Config {
 
-  private static input: FormInputComponent = {
+  static flexRow: FormRow = {
+    type: 'flexRow',
+    name: 'Flex Row',
+    flexLayout: 'row wrap',
+    components: []
+  };
+
+  static input: FormInputComponent = {
     type: 'input',
     name: 'myInputText',
     text: 'myInputText',
@@ -15,7 +22,7 @@ export class Config {
     },
   };
 
-  private static textarea: FormInputComponent = {
+  static textarea: FormInputComponent = {
     type: 'textarea',
     name: 'myTextarea',
     text: 'myTextarea',
@@ -28,7 +35,7 @@ export class Config {
     },
   };
 
-  private static select: FormInputComponent = {
+  static select: FormInputComponent = {
     type: 'select',
     name: 'mySelect',
     text: 'mySelect',
@@ -41,7 +48,7 @@ export class Config {
     },
   };
 
-  private static button: FormComponent = {
+  static button: FormComponent = {
     type: 'button',
     name: 'myButton',
     text: 'myButton',
@@ -53,11 +60,4 @@ export class Config {
       return `<button mat-raised-button color='primary' (click)='${ctx.name}Clicked()'>${ctx.text}</button>`;
     }
   };
-
-  public static components: Array<FormComponent> = [
-    Config.input,
-    Config.textarea,
-    Config.select,
-    Config.button
-  ];
 }

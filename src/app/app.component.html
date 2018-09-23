@@ -38,7 +38,7 @@
         </mat-expansion-panel-header>
 
         <div fxLayout="column">
-          <button mat-button (click)="addRow()">Add Row</button>
+          <button mat-button (click)="addRow(cont)" *ngFor="let cont of editorService.containers.values()">{{cont.name}}</button>
         </div>
       </mat-expansion-panel>
 
@@ -50,7 +50,7 @@
         </mat-expansion-panel-header>
 
         <div fxLayout="column">
-          <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components">
+          <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components.values()">
             {{component.type}}
           </button>
         </div>
@@ -62,25 +62,29 @@
         <span>Component properties</span>
       </mat-toolbar>
 
-      <mat-expansion-panel expanded="true" hideToggle="true">
+      <mat-expansion-panel expanded="true" hideToggle="true" *ngIf="selectedRow">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Row properties
           </mat-panel-title>
         </mat-expansion-panel-header>
 
+        <div>
         (row properties)
+        </div>
       </mat-expansion-panel>
 
 
-      <mat-expansion-panel expanded="true" hideToggle="true">
+      <mat-expansion-panel expanded="true" hideToggle="true" *ngIf="selectedComponent">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Component properties
           </mat-panel-title>
         </mat-expansion-panel-header>
 
+        <div>
         (component properties)
+        </div>
       </mat-expansion-panel>
 
     </mat-sidenav>
@@ -88,11 +92,14 @@
 
     <mat-sidenav-content>
       <mat-toolbar>
-        <button mat-icon-button (click)="sidenav.toggle()">
+        <button mat-icon-button matTooltip="Close left panel" (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
         <span fxFlex>Form layout</span>
-        <button mat-icon-button (click)="endnav.toggle()">
+        <button mat-icon-button matTooltip="Clear select" (click)="deselectComponent()">
+          <mat-icon>border_clear</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Close right panel" (click)="endnav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
       </mat-toolbar>
@@ -104,7 +111,7 @@
                [fxLayoutAlign]="row.flexLayoutAlign ? row.flexLayoutAlign : 'space-between start'"
                *ngFor="let row of formLayout">
 
-            <div class="element-layout" *ngFor="let element of row.components">
+            <div class="element-layout" *ngFor="let element of row.components" (click)="selectComponent(element, row)">
               {{element.name}} ({{element.text}})
             </div>
           </div>
