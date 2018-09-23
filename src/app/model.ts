@@ -1,10 +1,14 @@
+import {ITdDynamicElementConfig} from '@covalent/dynamic-forms';
 
 export interface FormRow {
   type: string;
-  name: string;
-  flexLayout?: string;
-  flexLayoutAlign?: string;
+  description: string;
+  fxLayout?: string;
+  fxLayoutAlign?: string;
+  fxLayoutGap?: string;
   components: Array<FormComponent>;
+  configProperties: ITdDynamicElementConfig[];
+  setProperties: (ctx: FormRow, values: any) => void;
 }
 
 export interface FormComponent {

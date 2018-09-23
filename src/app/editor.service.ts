@@ -7,16 +7,16 @@ import {FormComponent, FormRow} from './model';
 })
 export class EditorService {
 
-  private _containers = new Map<string, FormRow>([
-    [Config.flexRow.type, Config.flexRow]
-  ]);
+  private _containers: Array<FormRow> = [
+    Config.flexRow
+  ];
 
-  private _components = new Map<string, FormComponent>([
-    [Config.input.type, Config.input],
-    [Config.textarea.type, Config.textarea],
-    [Config.select.type, Config.select],
-    [Config.button.type, Config.button]
-  ]);
+  private _components: Array<FormComponent> = [
+    Config.input,
+    Config.textarea,
+    Config.select,
+    Config.button
+  ];
 
   constructor() {
 

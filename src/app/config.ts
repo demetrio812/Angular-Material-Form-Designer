@@ -1,12 +1,59 @@
 import {FormComponent, FormInputComponent, FormRow} from './model';
+import {TdDynamicElement} from '@covalent/dynamic-forms';
 
 export class Config {
 
   static flexRow: FormRow = {
     type: 'flexRow',
-    name: 'Flex Row',
-    flexLayout: 'row wrap',
-    components: []
+    description: 'Flex Row',
+    fxLayout: 'row',
+    fxLayoutAlign: '',
+    fxLayoutGap: '',
+    components: [],
+    configProperties: [
+      {
+        name: 'fxLayout',
+        label: 'fxLayout',
+        type: TdDynamicElement.Select,
+        required: true,
+        selections: ['row', 'column', 'row-reverse', 'column-reverse'],
+        default: 'row'
+      },
+      {
+        name: 'fxLayoutWrap',
+        label: 'fxLayout+Wrap',
+        type: TdDynamicElement.Checkbox,
+        default: false,
+        required: true
+      },
+      {
+        name: 'fxLayoutAlignMainAxis',
+        label: 'fxLayoutAlign-MainAxis',
+        type: TdDynamicElement.Select,
+        required: true,
+        selections: ['start', 'center', 'end', 'space-around', 'space-between', 'space-evenly'],
+        default: 'start'
+      },
+      {
+        name: 'fxLayoutAlignCrossAxis',
+        label: 'fxLayoutAlign-CrossAxis',
+        type: TdDynamicElement.Select,
+        required: true,
+        selections: ['start', 'center', 'end', 'space-around', 'space-between', 'space-evenly', 'stretch'],
+        default: 'start'
+      },
+      {
+        name: 'fxLayoutGap',
+        label: 'fxLayoutGap',
+        type: TdDynamicElement.Input,
+        hint: 'i.e. 10px',
+        required: false
+      }],
+    setProperties: (ctx: FormRow, values: any) => {
+      ctx.fxLayout = values['fxLayout'] + (values['fxLayoutWrap'] ? ' wrap' : '');
+      ctx.fxLayoutGap = values['fxLayoutGap'];
+      ctx.fxLayoutAlign = values['fxLayoutAlignMainAxis'] + ' ' + values['fxLayoutAlignCrossAxis'];
+    }
   };
 
   static input: FormInputComponent = {

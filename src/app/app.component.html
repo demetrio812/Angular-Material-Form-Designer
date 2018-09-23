@@ -38,7 +38,7 @@
         </mat-expansion-panel-header>
 
         <div fxLayout="column">
-          <button mat-button (click)="addRow(cont)" *ngFor="let cont of editorService.containers.values()">{{cont.name}}</button>
+          <button mat-button (click)="addRow(cont)" *ngFor="let cont of editorService.containers">{{cont.description}}</button>
         </div>
       </mat-expansion-panel>
 
@@ -50,7 +50,7 @@
         </mat-expansion-panel-header>
 
         <div fxLayout="column">
-          <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components.values()">
+          <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components">
             {{component.type}}
           </button>
         </div>
@@ -59,18 +59,31 @@
     </mat-sidenav>
     <mat-sidenav #endnav opened mode="side" position="end">
       <mat-toolbar>
-        <span>Component properties</span>
+        <span>Properties</span>
       </mat-toolbar>
 
       <mat-expansion-panel expanded="true" hideToggle="true" *ngIf="selectedRow">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Row properties
+            Row: {{selectedRow.type}}
           </mat-panel-title>
         </mat-expansion-panel-header>
 
         <div>
-        (row properties)
+          <td-dynamic-forms #selectedRowProperties [elements]="selectedRow.configProperties">
+            <ng-template let-element ngFor [ngForOf]="selectedRow.configProperties">
+              <ng-template let-control="control" [tdDynamicFormsError]="element.name">
+                <span *ngIf="control.touched || !control.pristine">
+                  <span *ngIf="control.hasError('required')">Required</span>
+                  <span *ngIf="control.hasError('min')">Min value: {{element.min}}</span>
+                  <span *ngIf="control.hasError('max')">Max value: {{element.max}}</span>
+                  <span *ngIf="control.hasError('minlength')">Min length value: {{element.minLength}}</span>
+                  <span *ngIf="control.hasError('maxlength')">Max length value: {{element.minLength}}</span>
+                </span>
+              </ng-template>
+            </ng-template>
+          </td-dynamic-forms>
+          <button mat-raised-button color="primary" (click)="saveRowProperties(selectedRowProperties.value)">Save</button>
         </div>
       </mat-expansion-panel>
 
@@ -78,7 +91,7 @@
       <mat-expansion-panel expanded="true" hideToggle="true" *ngIf="selectedComponent">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Component properties
+            Component: {{selectedComponent.name}}
           </mat-panel-title>
         </mat-expansion-panel-header>
 
@@ -107,11 +120,11 @@
       <mat-tab-group>
         <mat-tab label="Layout">
 
-          <div class="row-layout" [fxLayout]="row.flexLayout ? row.flexLayout : 'row wrap'"
-               [fxLayoutAlign]="row.flexLayoutAlign ? row.flexLayoutAlign : 'space-between start'"
+          <div class="row-layout" [ngClass]="{'selected': row == selectedRow}"
+               [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlign" [fxLayoutGap]="row.fxLayoutGap"
                *ngFor="let row of formLayout">
 
-            <div class="element-layout" *ngFor="let element of row.components" (click)="selectComponent(element, row)">
+            <div class="element-layout" [ngClass]="{'selected': element == selectedComponent}" [fxFlex]="element.flex" *ngFor="let element of row.components" (click)="selectComponent(element, row)">
               {{element.name}} ({{element.text}})
             </div>
           </div>
@@ -119,20 +132,21 @@
         </mat-tab>
         <mat-tab label="Preview">
 
-          <div class="row-preview" [fxLayout]="row.flexLayout ? row.flexLayout : 'row wrap'"
-               [fxLayoutAlign]="row.flexLayoutAlign ? row.flexLayoutAlign : 'space-between start'"
+          <div [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlign" [fxLayoutGap]="row.fxLayoutGap"
                *ngFor="let row of formLayout">
 
             <ng-container [ngSwitch]="element.type" *ngFor="let element of row.components">
-              <mat-form-field [fxFlex]="element.flex" *ngSwitchCase="'input'"><input matInput placeholder="{{element.text}}"></mat-form-field>
-              <mat-form-field [fxFlex]="element.flex" *ngSwitchCase="'textarea'"><textarea matInput placeholder="{{element.text}}"></textarea></mat-form-field>
-              <mat-select [fxFlex]="element.flex" *ngSwitchCase="'select'" placeholder="{{element.text}}"></mat-select>
+              <mat-form-field [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'input'"><input matInput placeholder="{{element.text}}"></mat-form-field>
+              <mat-form-field [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'textarea'"><textarea matInput placeholder="{{element.text}}"></textarea></mat-form-field>
+              <mat-select [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'select'" placeholder="{{element.text}}">
+                <mat-option>One</mat-option>
+                <mat-option>Two</mat-option>
+                <mat-option>Three</mat-option>
+              </mat-select>
               <button *ngSwitchCase="'button'" [fxFlex]="element.flex" mat-raised-button color='primary' >{{element.text}}</button>
               <div *ngSwitchDefault>(element)</div>
             </ng-container>
 
-
-            <!--<app-element-preview [element]="elem" *ngFor="let elem of row.components"></app-element-preview>-->
           </div>
 
         </mat-tab>

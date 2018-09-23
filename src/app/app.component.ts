@@ -1,8 +1,9 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {EditorService} from './editor.service';
 import {FormComponent, FormRow} from './model';
 import {ConverterService} from './converter.service';
 import * as _ from 'lodash';
+import {TdDynamicFormsComponent} from '@covalent/dynamic-forms';
 
 @Component({
   selector: 'app-root',
@@ -23,16 +24,16 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     // test
-    const row = this.editorService.containers.get('flexRow');
+    const row = this.editorService.containers[0];
     this.addRow(row);
-    this.addComponent(this.editorService.components.get('input'));
-    this.addComponent(this.editorService.components.get('input'));
+    this.addComponent(this.editorService.components[0]);
+    this.addComponent(this.editorService.components[0]);
     this.addRow(row);
-    this.addComponent(this.editorService.components.get('select'));
+    this.addComponent(this.editorService.components[2]);
     this.addRow(row);
-    this.addComponent(this.editorService.components.get('textarea'));
+    this.addComponent(this.editorService.components[1]);
     this.addRow(row);
-    this.addComponent(this.editorService.components.get('button'));
+    this.addComponent(this.editorService.components[3]);
   }
 
   addRow(row: FormRow) {
@@ -63,5 +64,11 @@ export class AppComponent implements OnInit {
     this.selectedComponent = null;
   }
 
+  saveRowProperties(value: any) {
+    console.log('saveRowProperties = ' + JSON.stringify(value));
+    this.selectedRow.setProperties(this.selectedRow, value);
+
+    console.log('edited = ' + JSON.stringify(this.selectedRow));
+  }
 
 }

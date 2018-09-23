@@ -49,7 +49,7 @@ export class ConverterService {
     let code = `\n<form [formGroup]=\'myForm\'>\n`;
 
     for (const row of formLayout) {
-      code += `\n<div fxLayout='${row.flexLayout ? row.flexLayout : 'row wrap'}' fxLayoutAlign='${row.flexLayoutAlign ? row.flexLayoutAlign : 'space-around center'}'>\n\n`;
+      code += `\n<div fxLayout='${row.fxLayout ? row.fxLayout : 'row wrap'}' fxLayoutAlign='${row.fxLayoutAlign ? row.fxLayoutAlign : 'space-around center'}'>\n\n`;
       for (const component of row.components) {
         if (component.htmlCode) {
           code += '\n' + component.htmlCode(component) + '\n';
