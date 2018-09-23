@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EditorService} from './editor.service';
 import {FormComponent, FormRow} from './model';
 import {ConverterService} from './converter.service';
@@ -9,7 +9,7 @@ import * as _ from 'lodash';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   formLayout: Array<FormRow> = [];
   selectedRow: FormRow = null;
@@ -18,6 +18,19 @@ export class AppComponent {
   constructor(public editorService: EditorService,
               public converterService: ConverterService) {
 
+  }
+
+  ngOnInit(): void {
+    // test
+    this.addRow();
+    this.addComponent(this.editorService.components[0]);
+    this.addComponent(this.editorService.components[0]);
+    this.addRow();
+    this.addComponent(this.editorService.components[2]);
+    this.addRow();
+    this.addComponent(this.editorService.components[1]);
+    this.addRow();
+    this.addComponent(this.editorService.components[3]);
   }
 
   addRow() {
@@ -46,5 +59,6 @@ export class AppComponent {
   deselectComponent() {
     this.selectedComponent = null;
   }
+
 
 }

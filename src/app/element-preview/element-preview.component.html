@@ -1,8 +1,8 @@
-<div [ngSwitch]="element.type" fxFlex="element.flex ? element.flex + '%' : '100%'">
-  <div *ngSwitchCase="'input'"><mat-form-field fxFlex><input matInput placeholder="{{element.text}}"></mat-form-field></div>
-  <div *ngSwitchCase="'textarea'"><mat-form-field fxFlex><textarea matInput placeholder="{{element.text}}"></textarea></mat-form-field></div>
-  <div *ngSwitchCase="'select'"><mat-select fxFlex placeholder="{{element.text}}"></mat-select></div>
-  <div *ngSwitchCase="'button'"><button fxFlex mat-raised-button color='primary' >{{element.text}}</button></div>
+<ng-container [ngSwitch]="element.type">
+  <mat-form-field [fxFlex]="element.flex" *ngSwitchCase="'input'"><input matInput placeholder="{{element.text}}"></mat-form-field>
+  <mat-form-field fxFlex *ngSwitchCase="'textarea'"><textarea matInput placeholder="{{element.text}}"></textarea></mat-form-field>
+  <mat-select fxFlex *ngSwitchCase="'select'" placeholder="{{element.text}}"></mat-select>
+  <button *ngSwitchCase="'button'" fxFlex mat-raised-button color='primary' >{{element.text}}</button>
   <div *ngSwitchDefault>(element)</div>
-</div>
+</ng-container>
 

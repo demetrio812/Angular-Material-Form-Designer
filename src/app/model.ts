@@ -9,7 +9,7 @@ export interface FormComponent {
   type: string;
   name: string;
   text: string;
-  flex?: number;
+  flex?: string;
 
   extraCode?: (ctx: FormComponent) => string;
   htmlCode?: (ctx: FormComponent) => string;

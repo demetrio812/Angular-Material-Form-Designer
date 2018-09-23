@@ -6,6 +6,7 @@ export class Config {
     type: 'input',
     name: 'myInputText',
     text: 'myInputText',
+    flex: 'auto',
     formBuilderCode: (ctx: FormComponent) => {
       return `${ctx.name}: '',`;
     },
@@ -18,6 +19,7 @@ export class Config {
     type: 'textarea',
     name: 'myTextarea',
     text: 'myTextarea',
+    flex: 'auto',
     formBuilderCode: (ctx: FormComponent) => {
       return `${ctx.name}: '',`;
     },
@@ -30,6 +32,7 @@ export class Config {
     type: 'select',
     name: 'mySelect',
     text: 'mySelect',
+    flex: 'auto',
     formBuilderCode: (ctx: FormComponent) => {
       return `${ctx.name}: '',`;
     },
@@ -42,6 +45,7 @@ export class Config {
     type: 'button',
     name: 'myButton',
     text: 'myButton',
+    flex: 'none',
     extraCode: (ctx: FormComponent) => {
       return `${ctx.name}Clicked() {\n   console.log('${ctx.name} clicked');\n}`;
     },

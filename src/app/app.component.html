@@ -24,21 +24,65 @@
 
   <mat-sidenav-container class="main-container">
     <mat-sidenav #sidenav opened mode="side" style="width: 150px">
+
       <mat-toolbar>
         <span>Form components</span>
       </mat-toolbar>
 
-      <div fxLayout="column">
-        <button mat-button (click)="addRow()">Add Row</button>
-        <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components">{{component.type}}</button>
-      </div>
+
+      <mat-expansion-panel expanded="true" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Containers
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div fxLayout="column">
+          <button mat-button (click)="addRow()">Add Row</button>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel expanded="true" hideToggle="true" *ngIf="selectedRow">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Components
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div fxLayout="column">
+          <button mat-button (click)="addComponent(component)" *ngFor="let component of editorService.components">
+            {{component.type}}
+          </button>
+        </div>
+      </mat-expansion-panel>
 
     </mat-sidenav>
     <mat-sidenav #endnav opened mode="side" position="end">
       <mat-toolbar>
         <span>Component properties</span>
       </mat-toolbar>
-      Form properties
+
+      <mat-expansion-panel expanded="true" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Row properties
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        (row properties)
+      </mat-expansion-panel>
+
+
+      <mat-expansion-panel expanded="true" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Component properties
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        (component properties)
+      </mat-expansion-panel>
+
     </mat-sidenav>
 
 
@@ -54,10 +98,34 @@
       </mat-toolbar>
 
       <mat-tab-group>
+        <mat-tab label="Layout">
+
+          <div class="row-layout" [fxLayout]="row.flexLayout ? row.flexLayout : 'row wrap'"
+               [fxLayoutAlign]="row.flexLayoutAlign ? row.flexLayoutAlign : 'space-between start'"
+               *ngFor="let row of formLayout">
+
+            <div class="element-layout" *ngFor="let element of row.components">
+              {{element.name}} ({{element.text}})
+            </div>
+          </div>
+
+        </mat-tab>
         <mat-tab label="Preview">
 
-          <div [fxLayout]="row.flexLayout ? row.flexLayout : 'row wrap'" [fxLayoutAlign]="row.flexLayoutAlign ? row.flexLayoutAlign : 'space-around center'"  *ngFor="let row of formLayout">
-            <app-element-preview [element]="elem" *ngFor="let elem of row.components"></app-element-preview>
+          <div class="row-preview" [fxLayout]="row.flexLayout ? row.flexLayout : 'row wrap'"
+               [fxLayoutAlign]="row.flexLayoutAlign ? row.flexLayoutAlign : 'space-between start'"
+               *ngFor="let row of formLayout">
+
+            <ng-container [ngSwitch]="element.type" *ngFor="let element of row.components">
+              <mat-form-field [fxFlex]="element.flex" *ngSwitchCase="'input'"><input matInput placeholder="{{element.text}}"></mat-form-field>
+              <mat-form-field [fxFlex]="element.flex" *ngSwitchCase="'textarea'"><textarea matInput placeholder="{{element.text}}"></textarea></mat-form-field>
+              <mat-select [fxFlex]="element.flex" *ngSwitchCase="'select'" placeholder="{{element.text}}"></mat-select>
+              <button *ngSwitchCase="'button'" [fxFlex]="element.flex" mat-raised-button color='primary' >{{element.text}}</button>
+              <div *ngSwitchDefault>(element)</div>
+            </ng-container>
+
+
+            <!--<app-element-preview [element]="elem" *ngFor="let elem of row.components"></app-element-preview>-->
           </div>
 
         </mat-tab>

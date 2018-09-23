@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
   MatCardModule,
-  MatDividerModule,
+  MatDividerModule, MatExpansionModule,
   MatIconModule, MatInputModule,
   MatMenuModule, MatSelectModule,
   MatSidenavModule, MatTabsModule,
@@ -39,7 +39,8 @@ import { ElementPreviewComponent } from './element-preview/element-preview.compo
     MatDividerModule,
     MatTabsModule,
     MatSelectModule,
-    MatInputModule
+    MatInputModule,
+    MatExpansionModule
   ],
   providers: [EditorService, ConverterService],
   bootstrap: [AppComponent]
