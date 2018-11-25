@@ -116,11 +116,15 @@ export class AppComponent implements OnInit {
     const idx = this.formLayout.findIndex(row => row.uuid === this.selectedRow.uuid);
     this.formLayout.splice(idx, 1);
     this.deselectComponent();
+
+    this.converterService.convert(this.formLayout);
   }
 
   deleteComponent() {
     const idx = this.selectedRow.components.findIndex(component => component.uuid === this.selectedComponent.uuid);
     this.selectedRow.components.splice(idx, 1);
     this.selectedComponent = null;
+
+    this.converterService.convert(this.formLayout);
   }
 }
