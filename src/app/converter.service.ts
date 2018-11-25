@@ -27,11 +27,11 @@ export class ConverterService {
   private getTsCode(formLayout: Array<FormRow>): string {
     const components = this.getComponentsArray(formLayout);
 
-    let code = '\nthis.myForm = this.fb.group({\n';
+    let code = '\nthis.myForm = this.fb.group({';
 
     for (const component of components) {
       if ((<FormInputComponent>component).formBuilderCode) {
-        code += '\n' + (<FormInputComponent>component).formBuilderCode(component) + '\n';
+        code += '\n' + (<FormInputComponent>component).formBuilderCode(component);
       }
     }
 
@@ -49,16 +49,16 @@ export class ConverterService {
     let code = `\n<form [formGroup]=\'myForm\'>\n`;
 
     for (const row of formLayout) {
-      code += `\n<div fxLayout='${row.fxLayout ? row.fxLayout : 'row wrap'}' fxLayoutAlign='${row.fxLayoutAlign ? row.fxLayoutAlign : 'space-around center'}'>\n\n`;
+      code += `\n<div fxLayout='${row.fxLayout ? row.fxLayout : 'row'} ${row.fxLayoutWrap ? 'wrap' : ''}' fxLayoutAlign='${row.fxLayoutAlignMainAxis ? row.fxLayoutAlignMainAxis : 'space-around'} ${row.fxLayoutAlignCrossAxis ? row.fxLayoutAlignCrossAxis : 'center'}'>\n`;
       for (const component of row.components) {
         if (component.htmlCode) {
           code += '\n' + component.htmlCode(component) + '\n';
         }
       }
-      code += `\n</div>\n\n`;
+      code += `\n</div>\n`;
     }
 
-    code += '\n</form>\n\n';
+    code += '\n</form>\n';
 
     return code;
   }

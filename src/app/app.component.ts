@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {EditorService} from './editor.service';
 import {FormComponent, FormRow} from './model';
 import {ConverterService} from './converter.service';
@@ -11,6 +11,8 @@ import {TdDynamicFormsComponent} from '@covalent/dynamic-forms';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  @ViewChild('selectedRowProperties') selectedRowProperties: TdDynamicFormsComponent;
+  @ViewChild('selectedComponentProperties') selectedComponentProperties: TdDynamicFormsComponent;
 
   formLayout: Array<FormRow> = [];
   selectedRow: FormRow = null;
@@ -36,6 +38,8 @@ export class AppComponent implements OnInit {
     this.addComponent(this.editorService.components[3]);
   }
 
+
+
   addRow(row: FormRow) {
     const clonedRow = _.cloneDeep(row);
     this.formLayout.push(clonedRow);
@@ -57,6 +61,19 @@ export class AppComponent implements OnInit {
     this.selectedComponent = component;
 
     this.changeDetectorRef.detectChanges();
+
+    // I have to set the values after the form elements are refreshed (after the detect changes cycle)
+    setTimeout(() => {
+      if (this.selectedRowProperties) {
+        // console.log('Patching form row ' + row.type);
+        this.selectedRowProperties.form.patchValue(row);
+      }
+
+      if (this.selectedComponentProperties) {
+        // console.log('Patching form component ' + component.name);
+        this.selectedComponentProperties.form.patchValue(component);
+      }
+    });
   }
 
   deselectComponent() {
@@ -66,9 +83,30 @@ export class AppComponent implements OnInit {
 
   saveRowProperties(value: any) {
     console.log('saveRowProperties = ' + JSON.stringify(value));
-    this.selectedRow.setProperties(this.selectedRow, value);
+    // this.selectedRow.setProperties(this.selectedRow, value);
+
+    const me = this;
+    Object.keys(value).forEach(name => {
+      if (me.selectedRow[name] !== undefined) {
+        me.selectedRow[name] = value[name];
+      }
+    });
 
     console.log('edited = ' + JSON.stringify(this.selectedRow));
+  }
+
+  saveComponentProperties(value: any) {
+    console.log('saveComponentProperties = ' + JSON.stringify(value));
+    // this.selectedComponent.setProperties(this.selectedComponent, value);
+
+    const me = this;
+    Object.keys(value).forEach(name => {
+      if (me.selectedComponent[name] !== undefined) {
+        me.selectedComponent[name] = value[name];
+      }
+    });
+
+    console.log('edited = ' + JSON.stringify(this.selectedComponent));
   }
 
 }

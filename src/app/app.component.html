@@ -26,7 +26,7 @@
     <mat-sidenav #sidenav opened mode="side" style="width: 150px">
 
       <mat-toolbar>
-        <span>Form components</span>
+        <span>Components</span>
       </mat-toolbar>
 
 
@@ -70,6 +70,7 @@
         </mat-expansion-panel-header>
 
         <div>
+          <!--<pre>{{selectedRow | json}}</pre>-->
           <td-dynamic-forms #selectedRowProperties [elements]="selectedRow.configProperties">
             <ng-template let-element ngFor [ngForOf]="selectedRow.configProperties">
               <ng-template let-control="control" [tdDynamicFormsError]="element.name">
@@ -91,12 +92,27 @@
       <mat-expansion-panel expanded="true" hideToggle="true" *ngIf="selectedComponent">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Component: {{selectedComponent.name}}
+            Component: {{selectedComponent.type}}
           </mat-panel-title>
         </mat-expansion-panel-header>
 
         <div>
-        (component properties)
+          <!--<pre>{{selectedComponent | json}}</pre>-->
+          <td-dynamic-forms #selectedComponentProperties [elements]="selectedComponent.configProperties">
+            <ng-template let-element ngFor [ngForOf]="selectedComponent.configProperties">
+              <ng-template let-control="control" [tdDynamicFormsError]="element.name">
+                <span *ngIf="control.touched || !control.pristine">
+                  <span *ngIf="control.hasError('required')">Required</span>
+                  <span *ngIf="control.hasError('min')">Min value: {{element.min}}</span>
+                  <span *ngIf="control.hasError('max')">Max value: {{element.max}}</span>
+                  <span *ngIf="control.hasError('minlength')">Min length value: {{element.minLength}}</span>
+                  <span *ngIf="control.hasError('maxlength')">Max length value: {{element.minLength}}</span>
+                </span>
+              </ng-template>
+            </ng-template>
+          </td-dynamic-forms>
+          <button mat-raised-button color="primary" (click)="saveComponentProperties(selectedComponentProperties.value)">Save</button>
+
         </div>
       </mat-expansion-panel>
 
@@ -151,14 +167,17 @@
 
         </mat-tab>
         <mat-tab label="Code">
-          <div>
-            <td-highlight lang="json" [content]="formLayout | json"></td-highlight>
-            <mat-divider></mat-divider>
-            <td-highlight lang="typescript" [content]="converterService.convertedTsCode"></td-highlight>
-            <mat-divider></mat-divider>
-
-            <td-highlight lang="html" [content]="converterService.convertedHtmlCode"></td-highlight>
-          </div>
+          <mat-tab-group>
+            <mat-tab label="JSON descriptor">
+              <td-highlight lang="json" [content]="formLayout | json"></td-highlight>
+            </mat-tab>
+            <mat-tab label="Ts">
+              <td-highlight lang="typescript" [content]="converterService.convertedTsCode"></td-highlight>
+            </mat-tab>
+            <mat-tab label="HTML">
+              <td-highlight lang="html" [content]="converterService.convertedHtmlCode"></td-highlight>
+            </mat-tab>
+          </mat-tab-group>
         </mat-tab>
       </mat-tab-group>
 

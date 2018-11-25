@@ -3,11 +3,34 @@ import {TdDynamicElement} from '@covalent/dynamic-forms';
 
 export class Config {
 
+
+  static formInputComponentDefaultConfigProperties = [
+    {
+      name: 'name',
+      label: 'Name',
+      type: TdDynamicElement.Input
+    },
+    {
+      name: 'text',
+      label: 'Text',
+      type: TdDynamicElement.Input,
+      required: false
+    },
+    {
+      name: 'flex',
+      label: 'Flex',
+      type: TdDynamicElement.Input,
+      hint: 'i.e. 50%',
+      required: false
+    }];
+
   static flexRow: FormRow = {
     type: 'flexRow',
     description: 'Flex Row',
     fxLayout: 'row',
-    fxLayoutAlign: '',
+    fxLayoutWrap: false,
+    fxLayoutAlignMainAxis: 'space-around',
+    fxLayoutAlignCrossAxis: 'center',
     fxLayoutGap: '',
     components: [],
     configProperties: [
@@ -48,12 +71,7 @@ export class Config {
         type: TdDynamicElement.Input,
         hint: 'i.e. 10px',
         required: false
-      }],
-    setProperties: (ctx: FormRow, values: any) => {
-      ctx.fxLayout = values['fxLayout'] + (values['fxLayoutWrap'] ? ' wrap' : '');
-      ctx.fxLayoutGap = values['fxLayoutGap'];
-      ctx.fxLayoutAlign = values['fxLayoutAlignMainAxis'] + ' ' + values['fxLayoutAlignCrossAxis'];
-    }
+      }]
   };
 
   static input: FormInputComponent = {
@@ -61,6 +79,7 @@ export class Config {
     name: 'myInputText',
     text: 'myInputText',
     flex: 'auto',
+    configProperties: Config.formInputComponentDefaultConfigProperties,
     formBuilderCode: (ctx: FormComponent) => {
       return `${ctx.name}: '',`;
     },
@@ -74,6 +93,7 @@ export class Config {
     name: 'myTextarea',
     text: 'myTextarea',
     flex: 'auto',
+    configProperties: Config.formInputComponentDefaultConfigProperties,
     formBuilderCode: (ctx: FormComponent) => {
       return `${ctx.name}: '',`;
     },
@@ -87,6 +107,7 @@ export class Config {
     name: 'mySelect',
     text: 'mySelect',
     flex: 'auto',
+    configProperties: Config.formInputComponentDefaultConfigProperties,
     formBuilderCode: (ctx: FormComponent) => {
       return `${ctx.name}: '',`;
     },
@@ -100,6 +121,7 @@ export class Config {
     name: 'myButton',
     text: 'myButton',
     flex: 'none',
+    configProperties: Config.formInputComponentDefaultConfigProperties,
     extraCode: (ctx: FormComponent) => {
       return `${ctx.name}Clicked() {\n   console.log('${ctx.name} clicked');\n}`;
     },
@@ -107,4 +129,5 @@ export class Config {
       return `<button mat-raised-button color='primary' (click)='${ctx.name}Clicked()'>${ctx.text}</button>`;
     }
   };
+
 }

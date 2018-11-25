@@ -4,11 +4,12 @@ export interface FormRow {
   type: string;
   description: string;
   fxLayout?: string;
-  fxLayoutAlign?: string;
+  fxLayoutWrap?: boolean;
+  fxLayoutAlignMainAxis?: string;
+  fxLayoutAlignCrossAxis?: string;
   fxLayoutGap?: string;
   components: Array<FormComponent>;
   configProperties: ITdDynamicElementConfig[];
-  setProperties: (ctx: FormRow, values: any) => void;
 }
 
 export interface FormComponent {
@@ -16,6 +17,8 @@ export interface FormComponent {
   name: string;
   text: string;
   flex?: string;
+
+  configProperties: ITdDynamicElementConfig[];
 
   extraCode?: (ctx: FormComponent) => string;
   htmlCode?: (ctx: FormComponent) => string;
