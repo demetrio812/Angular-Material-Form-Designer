@@ -1,5 +1,24 @@
-import {FormComponent, FormInputComponent, FormRow} from './model';
-import {TdDynamicElement} from '@covalent/dynamic-forms';
+import {Form, FormComponent, FormInputComponent, FormRow} from './model';
+import {ITdDynamicElementConfig, TdDynamicElement} from '@covalent/dynamic-forms';
+
+export class DefaultForm implements Form {
+  configProperties: ITdDynamicElementConfig[];
+  name: string;
+  rows: Array<FormRow>;
+
+  constructor() {
+    this.name = 'myNewForm';
+    this.rows = [];
+    this.configProperties = [
+      {
+        name: 'name',
+        label: 'Name',
+        type: TdDynamicElement.Input,
+        hint: '',
+        required: true
+      }];
+  }
+}
 
 export class Config {
 

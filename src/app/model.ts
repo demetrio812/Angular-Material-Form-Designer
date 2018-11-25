@@ -1,5 +1,11 @@
 import {ITdDynamicElementConfig} from '@covalent/dynamic-forms';
 
+export interface Form {
+  name: string;
+  rows: Array<FormRow>;
+  configProperties: ITdDynamicElementConfig[];
+}
+
 export interface FormRow {
   uuid: string;
   type: string;

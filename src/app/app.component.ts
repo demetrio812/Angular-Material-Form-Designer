@@ -1,10 +1,11 @@
 import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {EditorService} from './editor.service';
-import {FormComponent, FormRow} from './model';
+import {Form, FormComponent, FormRow} from './model';
 import {ConverterService} from './converter.service';
 import * as _ from 'lodash';
 import {TdDynamicFormsComponent} from '@covalent/dynamic-forms';
-import uuidv1 from "uuid/v1";
+import uuidv1 from 'uuid/v1';
+import {DefaultForm} from './config';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,11 @@ import uuidv1 from "uuid/v1";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  @ViewChild('selectedFormProperties') selectedFormProperties: TdDynamicFormsComponent;
   @ViewChild('selectedRowProperties') selectedRowProperties: TdDynamicFormsComponent;
   @ViewChild('selectedComponentProperties') selectedComponentProperties: TdDynamicFormsComponent;
 
-  formLayout: Array<FormRow> = [];
+  form: DefaultForm = new DefaultForm();
   selectedRow: FormRow = null;
   selectedComponent: FormComponent = null;
 
@@ -26,6 +28,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setFormValues();
+
     // test
     const row = this.editorService.containers[0];
     this.addRow(row);
@@ -39,12 +43,10 @@ export class AppComponent implements OnInit {
     this.addComponent(this.editorService.components[3]);
   }
 
-
-
   addRow(row: FormRow) {
     const clonedRow = _.cloneDeep(row);
     clonedRow.uuid = uuidv1();
-    this.formLayout.push(clonedRow);
+    this.form.rows.push(clonedRow);
     this.selectedRow = clonedRow;
   }
 
@@ -55,8 +57,14 @@ export class AppComponent implements OnInit {
       this.selectedRow.components.push(clonedComponent);
       this.selectComponent(clonedComponent, this.selectedRow);
 
-      this.converterService.convert(this.formLayout);
+      this.refreshGeneratedCode();
     }
+  }
+
+  setFormValues() {
+    setTimeout(() => {
+      this.selectedFormProperties.form.patchValue(this.form);
+    });
   }
 
   selectComponent(component: FormComponent, row: FormRow) {
@@ -84,6 +92,20 @@ export class AppComponent implements OnInit {
     this.selectedComponent = null;
   }
 
+  saveFormProperties(value: any) {
+    console.log('saveFormProperties = ' + JSON.stringify(value));
+    // this.selectedRow.setProperties(this.selectedRow, value);
+
+    const me = this;
+    Object.keys(value).forEach(name => {
+      if (me.form[name] !== undefined) {
+        me.form[name] = value[name];
+      }
+    });
+
+    this.refreshGeneratedCode();
+  }
+
   saveRowProperties(value: any) {
     console.log('saveRowProperties = ' + JSON.stringify(value));
     // this.selectedRow.setProperties(this.selectedRow, value);
@@ -96,6 +118,8 @@ export class AppComponent implements OnInit {
     });
 
     console.log('edited = ' + JSON.stringify(this.selectedRow));
+
+    this.refreshGeneratedCode();
   }
 
   saveComponentProperties(value: any) {
@@ -110,14 +134,24 @@ export class AppComponent implements OnInit {
     });
 
     console.log('edited = ' + JSON.stringify(this.selectedComponent));
+
+    this.refreshGeneratedCode();
   }
 
+  clearForm() {
+    this.deselectComponent();
+    this.form = new DefaultForm();
+
+    this.refreshGeneratedCode();
+  }
+
+
   deleteRow() {
-    const idx = this.formLayout.findIndex(row => row.uuid === this.selectedRow.uuid);
-    this.formLayout.splice(idx, 1);
+    const idx = this.form.rows.findIndex(row => row.uuid === this.selectedRow.uuid);
+    this.form.rows.splice(idx, 1);
     this.deselectComponent();
 
-    this.converterService.convert(this.formLayout);
+    this.refreshGeneratedCode();
   }
 
   deleteComponent() {
@@ -125,6 +159,14 @@ export class AppComponent implements OnInit {
     this.selectedRow.components.splice(idx, 1);
     this.selectedComponent = null;
 
-    this.converterService.convert(this.formLayout);
+    this.refreshGeneratedCode();
+  }
+
+  // Import
+
+
+  // Code generation
+  private refreshGeneratedCode() {
+    this.converterService.convert(this.form);
   }
 }

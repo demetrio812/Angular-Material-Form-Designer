@@ -62,6 +62,37 @@
         <span>Properties</span>
       </mat-toolbar>
 
+      <mat-expansion-panel expanded="true" hideToggle="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Form
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div fxLayout="column">
+          <!--<pre>{{selectedComponent | json}}</pre>-->
+          <td-dynamic-forms #selectedFormProperties [elements]="form.configProperties">
+            <ng-template let-element ngFor [ngForOf]="form.configProperties">
+              <ng-template let-control="control" [tdDynamicFormsError]="element.name">
+                <span *ngIf="control.touched || !control.pristine">
+                  <span *ngIf="control.hasError('required')">Required</span>
+                  <span *ngIf="control.hasError('min')">Min value: {{element.min}}</span>
+                  <span *ngIf="control.hasError('max')">Max value: {{element.max}}</span>
+                  <span *ngIf="control.hasError('minlength')">Min length value: {{element.minLength}}</span>
+                  <span *ngIf="control.hasError('maxlength')">Max length value: {{element.minLength}}</span>
+                </span>
+              </ng-template>
+            </ng-template>
+          </td-dynamic-forms>
+          <div fxLayout="row">
+            <button mat-raised-button color="primary" (click)="saveFormProperties(selectedFormProperties.value)">Save</button>
+            <span fxFlex></span>
+            <button mat-button color="secondary" (click)="clearForm()">Clear form</button>
+          </div>
+
+        </div>
+      </mat-expansion-panel>
+
       <mat-expansion-panel expanded="true" hideToggle="true" *ngIf="selectedRow">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -91,7 +122,6 @@
           </div>
         </div>
       </mat-expansion-panel>
-
 
       <mat-expansion-panel expanded="true" hideToggle="true" *ngIf="selectedComponent">
         <mat-expansion-panel-header>
@@ -146,7 +176,7 @@
 
           <div class="row-layout" [ngClass]="{'selected': row == selectedRow}"
                [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlign" [fxLayoutGap]="row.fxLayoutGap"
-               *ngFor="let row of formLayout">
+               *ngFor="let row of form.rows">
 
             <div class="element-layout" [ngClass]="{'selected': element == selectedComponent}" [fxFlex]="element.flex" *ngFor="let element of row.components" (click)="selectComponent(element, row)">
               {{element.name}} ({{element.text}})
@@ -157,7 +187,7 @@
         <mat-tab label="Preview">
 
           <div [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlign" [fxLayoutGap]="row.fxLayoutGap"
-               *ngFor="let row of formLayout">
+               *ngFor="let row of form.rows">
 
             <ng-container [ngSwitch]="element.type" *ngFor="let element of row.components">
               <mat-form-field [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'input'"><input matInput placeholder="{{element.text}}"></mat-form-field>
@@ -177,7 +207,7 @@
         <mat-tab label="Code">
           <mat-tab-group>
             <mat-tab label="JSON descriptor">
-              <td-highlight lang="json" [content]="formLayout | json"></td-highlight>
+              <td-highlight lang="json" [content]="form | json"></td-highlight>
             </mat-tab>
             <mat-tab label="Ts">
               <td-highlight lang="typescript" [content]="converterService.convertedTsCode"></td-highlight>

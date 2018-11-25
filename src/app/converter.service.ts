@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormComponent, FormInputComponent, FormRow} from './model';
+import {Form, FormComponent, FormInputComponent, FormRow} from './model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +11,9 @@ export class ConverterService {
   constructor() {
   }
 
-  convert(formLayout: Array<FormRow>) {
-    this._convertedTsCode = this.getTsCode(formLayout);
-    this._convertedHtmlCode = this.getHtmlCode(formLayout);
+  convert(form: Form) {
+    this._convertedTsCode = this.getTsCode(form);
+    this._convertedHtmlCode = this.getHtmlCode(form);
   }
 
   get convertedHtmlCode(): String {
@@ -24,10 +24,13 @@ export class ConverterService {
     return this._convertedTsCode;
   }
 
-  private getTsCode(formLayout: Array<FormRow>): string {
-    const components = this.getComponentsArray(formLayout);
+  private getTsCode(form: Form): string {
+    const components = this.getComponentsArray(form.rows);
 
-    let code = '\nthis.myForm = this.fb.group({';
+    let code =
+      `${form.name}: FormGroup;\n\n` +
+      `\nprivate ${form.name}Setup(): void {\n` +
+      `this.${form.name} = this.fb.group({`;
 
     for (const component of components) {
       if ((<FormInputComponent>component).formBuilderCode) {
@@ -35,7 +38,9 @@ export class ConverterService {
       }
     }
 
-    code += '\n});\n\n';
+    code +=
+      '\n});\n' +
+      '}\n';
 
     for (const component of components) {
       if (component.extraCode) {
@@ -45,10 +50,10 @@ export class ConverterService {
     return code;
   }
 
-  private getHtmlCode(formLayout: Array<FormRow>): string {
-    let code = `\n<form [formGroup]=\'myForm\'>\n`;
+  private getHtmlCode(form: Form): string {
+    let code = `\n<form [formGroup]=\'${form.name}\'>\n`;
 
-    for (const row of formLayout) {
+    for (const row of form.rows) {
       code += `\n<div fxLayout='${row.fxLayout ? row.fxLayout : 'row'} ${row.fxLayoutWrap ? 'wrap' : ''}' fxLayoutAlign='${row.fxLayoutAlignMainAxis ? row.fxLayoutAlignMainAxis : 'space-around'} ${row.fxLayoutAlignCrossAxis ? row.fxLayoutAlignCrossAxis : 'center'}'>\n`;
       for (const component of row.components) {
         if (component.htmlCode) {
