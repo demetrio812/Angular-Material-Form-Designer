@@ -4,6 +4,7 @@ import {FormComponent, FormRow} from './model';
 import {ConverterService} from './converter.service';
 import * as _ from 'lodash';
 import {TdDynamicFormsComponent} from '@covalent/dynamic-forms';
+import uuidv1 from "uuid/v1";
 
 @Component({
   selector: 'app-root',
@@ -42,6 +43,7 @@ export class AppComponent implements OnInit {
 
   addRow(row: FormRow) {
     const clonedRow = _.cloneDeep(row);
+    clonedRow.uuid = uuidv1();
     this.formLayout.push(clonedRow);
     this.selectedRow = clonedRow;
   }
@@ -49,6 +51,7 @@ export class AppComponent implements OnInit {
   addComponent(component: FormComponent) {
     if (this.selectedRow) {
       const clonedComponent = _.cloneDeep(component);
+      clonedComponent.uuid = uuidv1();
       this.selectedRow.components.push(clonedComponent);
       this.selectComponent(clonedComponent, this.selectedRow);
 
@@ -110,14 +113,14 @@ export class AppComponent implements OnInit {
   }
 
   deleteRow() {
-    this.deselectComponent();
-    const idx = this.formLayout.findIndex(row => row === this.selectedRow);
+    const idx = this.formLayout.findIndex(row => row.uuid === this.selectedRow.uuid);
     this.formLayout.splice(idx, 1);
+    this.deselectComponent();
   }
 
   deleteComponent() {
-    this.selectedComponent = null;
-    const idx = this.selectedRow.components.findIndex(component => component === this.selectedComponent);
+    const idx = this.selectedRow.components.findIndex(component => component.uuid === this.selectedComponent.uuid);
     this.selectedRow.components.splice(idx, 1);
+    this.selectedComponent = null;
   }
 }

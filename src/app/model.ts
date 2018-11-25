@@ -1,6 +1,7 @@
 import {ITdDynamicElementConfig} from '@covalent/dynamic-forms';
 
 export interface FormRow {
+  uuid: string;
   type: string;
   description: string;
   fxLayout?: string;
@@ -13,6 +14,7 @@ export interface FormRow {
 }
 
 export interface FormComponent {
+  uuid: string;
   type: string;
   name: string;
   text: string;

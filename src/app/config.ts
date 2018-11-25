@@ -25,6 +25,7 @@ export class Config {
     }];
 
   static flexRow: FormRow = {
+    uuid: '',
     type: 'flexRow',
     description: 'Flex Row',
     fxLayout: 'row',
@@ -75,6 +76,7 @@ export class Config {
   };
 
   static input: FormInputComponent = {
+    uuid: '',
     type: 'input',
     name: 'myInputText',
     text: 'myInputText',
@@ -89,6 +91,7 @@ export class Config {
   };
 
   static textarea: FormInputComponent = {
+    uuid: '',
     type: 'textarea',
     name: 'myTextarea',
     text: 'myTextarea',
@@ -103,6 +106,7 @@ export class Config {
   };
 
   static select: FormInputComponent = {
+    uuid: '',
     type: 'select',
     name: 'mySelect',
     text: 'mySelect',
@@ -117,6 +121,7 @@ export class Config {
   };
 
   static button: FormComponent = {
+    uuid: '',
     type: 'button',
     name: 'myButton',
     text: 'myButton',
