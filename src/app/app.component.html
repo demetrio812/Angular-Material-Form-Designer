@@ -217,10 +217,25 @@
             </mat-tab>
           </mat-tab-group>
         </mat-tab>
-      </mat-tab-group>
-      <mat-tab label="Import">
+        <mat-tab label="Import">
+          <div fxLayout="column">
+          <form [formGroup]='importForm' fxFlex>
+            <div fxLayout='row ' fxLayoutAlign='space-around center'>
 
-      </mat-tab>
+              <mat-form-field fxFlex>
+                <textarea matInput placeholder="Insert descriptor here" formControlName="jsonDescriptor"></textarea>
+              </mat-form-field>
+
+            </div>
+
+            <div fxLayout='row ' fxLayoutAlign='space-around center'>
+              <button mat-raised-button color='primary' (click)='importBtnClicked()'>Import</button>
+            </div>
+
+          </form>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </mat-sidenav-content>
 
   </mat-sidenav-container>

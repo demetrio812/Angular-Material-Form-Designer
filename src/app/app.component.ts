@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import {TdDynamicFormsComponent} from '@covalent/dynamic-forms';
 import uuidv1 from 'uuid/v1';
 import {DefaultForm} from './config';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +22,13 @@ export class AppComponent implements OnInit {
   selectedRow: FormRow = null;
   selectedComponent: FormComponent = null;
 
+  importForm: FormGroup;
+
   constructor(public editorService: EditorService,
               public converterService: ConverterService,
-              private changeDetectorRef: ChangeDetectorRef) {
-
+              private changeDetectorRef: ChangeDetectorRef,
+              private fb: FormBuilder) {
+    this.importFormSetup();
   }
 
   ngOnInit(): void {
@@ -163,7 +167,21 @@ export class AppComponent implements OnInit {
   }
 
   // Import
+  private importFormSetup(): void {
+    this.importForm = this.fb.group({
+      jsonDescriptor: '',
+    });
+  }
 
+  importBtnClicked() {
+    const value = this.importForm.value;
+    console.log('you submitted value:', value);
+    if (this.importForm.valid) {
+      console.log('valid');
+      const importedForm = JSON.parse(value['jsonDescriptor']);
+      this.form = importedForm;
+    }
+  }
 
   // Code generation
   private refreshGeneratedCode() {

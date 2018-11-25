@@ -28,9 +28,16 @@ export class ConverterService {
     const components = this.getComponentsArray(form.rows);
 
     let code =
-      `${form.name}: FormGroup;\n\n` +
-      `\nprivate ${form.name}Setup(): void {\n` +
-      `this.${form.name} = this.fb.group({`;
+`
+${form.name}: FormGroup;
+
+constructor(private fb: FormBuilder) {
+    this.${form.name}Setup();
+}
+
+private ${form.name}Setup(): void {
+    this.${form.name} = this.fb.group({
+`;
 
     for (const component of components) {
       if ((<FormInputComponent>component).formBuilderCode) {
@@ -39,8 +46,10 @@ export class ConverterService {
     }
 
     code +=
-      '\n});\n' +
-      '}\n';
+`
+    });
+}
+`;
 
     for (const component of components) {
       if (component.extraCode) {

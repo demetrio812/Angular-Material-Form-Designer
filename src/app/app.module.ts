@@ -18,6 +18,7 @@ import {ConverterService} from './converter.service';
 import {CovalentHighlightModule} from '@covalent/highlight';
 import {CovalentDynamicFormsModule} from '@covalent/dynamic-forms';
 import { ElementPreviewComponent } from './element-preview/element-preview.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ElementPreviewComponent } from './element-preview/element-preview.compo
     BrowserModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
     CovalentHighlightModule,
     CovalentDynamicFormsModule,
     MatToolbarModule,
