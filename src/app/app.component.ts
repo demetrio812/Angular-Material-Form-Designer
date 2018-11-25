@@ -109,4 +109,15 @@ export class AppComponent implements OnInit {
     console.log('edited = ' + JSON.stringify(this.selectedComponent));
   }
 
+  deleteRow() {
+    this.deselectComponent();
+    const idx = this.formLayout.findIndex(row => row === this.selectedRow);
+    this.formLayout.splice(idx, 1);
+  }
+
+  deleteComponent() {
+    this.selectedComponent = null;
+    const idx = this.selectedRow.components.findIndex(component => component === this.selectedComponent);
+    this.selectedRow.components.splice(idx, 1);
+  }
 }
