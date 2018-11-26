@@ -25,3 +25,11 @@
   border: 1px solid #9a000c;
   background-color: #f9b5a3;
 }
+
+.preview-container, .import-export-json-container {
+  padding: 16px;
+}
+
+.import-json-descriptor-text-area {
+  height: 200px;
+}

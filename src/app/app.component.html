@@ -175,7 +175,7 @@
         <mat-tab label="Layout">
 
           <div class="row-layout" [ngClass]="{'selected': row == selectedRow}"
-               [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlign" [fxLayoutGap]="row.fxLayoutGap"
+               [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlignMainAxis + (row.fxLayoutAlignCrossAxis ? ' ' + row.fxLayoutAlignCrossAxis : '')" [fxLayoutGap]="row.fxLayoutGap"
                *ngFor="let row of form.rows">
 
             <div class="element-layout" [ngClass]="{'selected': element == selectedComponent}" [fxFlex]="element.flex" *ngFor="let element of row.components" (click)="selectComponent(element, row)">
@@ -187,10 +187,11 @@
         <mat-tab label="Preview">
 
           <div [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlign" [fxLayoutGap]="row.fxLayoutGap"
-               *ngFor="let row of form.rows">
+               class="preview-container" *ngFor="let row of form.rows">
 
             <ng-container [ngSwitch]="element.type" *ngFor="let element of row.components">
-              <mat-form-field [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'input'"><input matInput placeholder="{{element.text}}"></mat-form-field>
+              <mat-form-field [fxFlex]="element.flex" *ngSwitchCase="'input' && !element.flexFill"><input matInput placeholder="{{element.text}}"></mat-form-field>
+              <mat-form-field [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'input' && element.flexFill"><input matInput placeholder="{{element.text}}"></mat-form-field>
               <mat-form-field [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'textarea'"><textarea matInput placeholder="{{element.text}}"></textarea></mat-form-field>
               <mat-select [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'select'" placeholder="{{element.text}}">
                 <mat-option>One</mat-option>
@@ -206,9 +207,6 @@
         </mat-tab>
         <mat-tab label="Code">
           <mat-tab-group>
-            <mat-tab label="JSON descriptor">
-              <td-highlight lang="json" [content]="form | json"></td-highlight>
-            </mat-tab>
             <mat-tab label="Ts">
               <td-highlight lang="typescript" [content]="converterService.convertedTsCode"></td-highlight>
             </mat-tab>
@@ -217,24 +215,29 @@
             </mat-tab>
           </mat-tab-group>
         </mat-tab>
-        <mat-tab label="Import">
-          <div fxLayout="column">
-          <form [formGroup]='importForm' fxFlex>
-            <div fxLayout='row ' fxLayoutAlign='space-around center'>
+        <mat-tab label="Import / Export">
+          <div fxLayout="column" class="import-export-json-container">
+            <h2>Import</h2>
+            <form [formGroup]='importForm' fxFlex>
+              <div fxLayout='row ' fxLayoutAlign='start'>
+                <mat-form-field fxFlex>
+                  <textarea matInput placeholder="Insert descriptor here" formControlName="jsonDescriptor"
+                            class="import-json-descriptor-text-area"></textarea>
+                </mat-form-field>
+              </div>
 
-              <mat-form-field fxFlex>
-                <textarea matInput placeholder="Insert descriptor here" formControlName="jsonDescriptor"></textarea>
-              </mat-form-field>
-
-            </div>
-
-            <div fxLayout='row ' fxLayoutAlign='space-around center'>
-              <button mat-raised-button color='primary' (click)='importBtnClicked()'>Import</button>
-            </div>
-
-          </form>
+              <div fxLayout='row ' fxLayoutAlign='end'>
+                <button mat-raised-button color='primary' (click)='importBtnClicked()'>Import</button>
+              </div>
+            </form>
+            <h2>Export</h2>
+            <td-highlight lang="json" [content]="exportJson"></td-highlight>
           </div>
         </mat-tab>
+        <mat-tab label="">
+
+        </mat-tab>
+
       </mat-tab-group>
     </mat-sidenav-content>
 

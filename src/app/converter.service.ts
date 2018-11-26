@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Form, FormComponent, FormInputComponent, FormRow} from './model';
+import {ComponentConverter, Form, FormComponent, FormInputComponent, FormRow} from './model/model';
+import {EditorService} from './editor.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ export class ConverterService {
   private _convertedTsCode: String;
   private _convertedHtmlCode: String;
 
-  constructor() {
+  constructor(private editorService: EditorService) {
   }
 
   convert(form: Form) {
@@ -40,8 +41,10 @@ private ${form.name}Setup(): void {
 `;
 
     for (const component of components) {
-      if ((<FormInputComponent>component).formBuilderCode) {
-        code += '\n' + (<FormInputComponent>component).formBuilderCode(component);
+      const converter = this.getConverterForType(component.type);
+      if (converter.formBuilderCode) {
+        const genCode = converter.formBuilderCode(<FormInputComponent>component);
+        code += '\n' + genCode;
       }
     }
 
@@ -52,8 +55,10 @@ private ${form.name}Setup(): void {
 `;
 
     for (const component of components) {
-      if (component.extraCode) {
-        code += '\n' + component.extraCode(component) + '\n';
+      const converter = this.getConverterForType(component.type);
+      if (converter.extraCode) {
+        const genCode = converter.extraCode(<FormInputComponent>component);
+        code += '\n' + genCode + '\n';
       }
     }
     return code;
@@ -65,8 +70,10 @@ private ${form.name}Setup(): void {
     for (const row of form.rows) {
       code += `\n<div fxLayout='${row.fxLayout ? row.fxLayout : 'row'} ${row.fxLayoutWrap ? 'wrap' : ''}' fxLayoutAlign='${row.fxLayoutAlignMainAxis ? row.fxLayoutAlignMainAxis : 'space-around'} ${row.fxLayoutAlignCrossAxis ? row.fxLayoutAlignCrossAxis : 'center'}'>\n`;
       for (const component of row.components) {
-        if (component.htmlCode) {
-          code += '\n' + component.htmlCode(component) + '\n';
+        const converter = this.getConverterForType(component.type);
+        if (converter.htmlCode) {
+          const genCode = converter.htmlCode(<FormInputComponent>component);
+          code += '\n' + genCode + '\n';
         }
       }
       code += `\n</div>\n`;
@@ -86,5 +93,9 @@ private ${form.name}Setup(): void {
       }
     }
     return components;
+  }
+
+  private getConverterForType(type: string): ComponentConverter<FormComponent> {
+    return this.editorService.getConverterForType(type);
   }
 }

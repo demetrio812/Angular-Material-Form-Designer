@@ -1,29 +1,11 @@
-import {Form, FormComponent, FormInputComponent, FormRow} from './model';
 import {ITdDynamicElementConfig, TdDynamicElement} from '@covalent/dynamic-forms';
-
-export class DefaultForm implements Form {
-  configProperties: ITdDynamicElementConfig[];
-  name: string;
-  rows: Array<FormRow>;
-
-  constructor() {
-    this.name = 'myNewForm';
-    this.rows = [];
-    this.configProperties = [
-      {
-        name: 'name',
-        label: 'Name',
-        type: TdDynamicElement.Input,
-        hint: '',
-        required: true
-      }];
-  }
-}
+import {FormComponent, FormInputComponent, FormRow} from './model';
+import {DefaultFormRow} from './impl';
 
 export class Config {
 
 
-  static formInputComponentDefaultConfigProperties = [
+  static formInputComponentDefaultConfigProperties: ITdDynamicElementConfig[] = [
     {
       name: 'name',
       label: 'Name',
@@ -41,16 +23,30 @@ export class Config {
       type: TdDynamicElement.Input,
       hint: 'i.e. 50%',
       required: false
+    },
+    {
+      name: 'flexFill',
+      label: 'Flex fill',
+      type: TdDynamicElement.Checkbox,
+      default: false,
+      required: false
+    },
+    {
+      name: 'required',
+      label: 'Required',
+      type: TdDynamicElement.Checkbox,
+      default: false,
+      required: false
     }];
 
-  static flexRow: FormRow = {
+  static flexRow: DefaultFormRow = {
     uuid: '',
     type: 'flexRow',
     description: 'Flex Row',
     fxLayout: 'row',
     fxLayoutWrap: false,
-    fxLayoutAlignMainAxis: 'space-around',
-    fxLayoutAlignCrossAxis: 'center',
+    fxLayoutAlignMainAxis: 'start',
+    fxLayoutAlignCrossAxis: 'start',
     fxLayoutGap: '',
     components: [],
     configProperties: [
@@ -100,13 +96,15 @@ export class Config {
     name: 'myInputText',
     text: 'myInputText',
     flex: 'auto',
+    flexFill: false,
+    required: false,
     configProperties: Config.formInputComponentDefaultConfigProperties,
-    formBuilderCode: (ctx: FormComponent) => {
+    /*formBuilderCode: (ctx: FormComponent) => {
       return `${ctx.name}: '',`;
     },
     htmlCode: (ctx: FormComponent) => {
       return `<mat-form-field>\n<input matInput placeholder="${ctx.text}" formControlName="${ctx.name}">\n</mat-form-field>`;
-    },
+    },*/
   };
 
   static textarea: FormInputComponent = {
@@ -115,13 +113,15 @@ export class Config {
     name: 'myTextarea',
     text: 'myTextarea',
     flex: 'auto',
+    flexFill: false,
+    required: false,
     configProperties: Config.formInputComponentDefaultConfigProperties,
-    formBuilderCode: (ctx: FormComponent) => {
+    /*formBuilderCode: (ctx: FormComponent) => {
       return `${ctx.name}: '',`;
     },
     htmlCode: (ctx: FormComponent) => {
       return `<mat-form-field>\n<textarea matInput placeholder="${ctx.text}" formControlName="${ctx.name}"></textarea>\n</mat-form-field>`;
-    },
+    },*/
   };
 
   static select: FormInputComponent = {
@@ -130,13 +130,15 @@ export class Config {
     name: 'mySelect',
     text: 'mySelect',
     flex: 'auto',
+    flexFill: false,
+    required: false,
     configProperties: Config.formInputComponentDefaultConfigProperties,
-    formBuilderCode: (ctx: FormComponent) => {
+    /*formBuilderCode: (ctx: FormComponent) => {
       return `${ctx.name}: '',`;
     },
     htmlCode: (ctx: FormComponent) => {
       return `<mat-form-field>\n<mat-select placeholder="${ctx.text}" formControlName="${ctx.name}"></mat-select>\n</mat-form-field>`;
-    },
+    },*/
   };
 
   static button: FormComponent = {
@@ -145,13 +147,14 @@ export class Config {
     name: 'myButton',
     text: 'myButton',
     flex: 'none',
+    flexFill: false,
     configProperties: Config.formInputComponentDefaultConfigProperties,
-    extraCode: (ctx: FormComponent) => {
+    /*extraCode: (ctx: FormComponent) => {
       return `${ctx.name}Clicked() {\n   console.log('${ctx.name} clicked');\n}`;
     },
     htmlCode: (ctx: FormComponent) => {
       return `<button mat-raised-button color='primary' (click)='${ctx.name}Clicked()'>${ctx.text}</button>`;
-    }
+    }*/
   };
 
 }

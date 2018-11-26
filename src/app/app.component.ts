@@ -1,12 +1,13 @@
 import {AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {EditorService} from './editor.service';
-import {Form, FormComponent, FormRow} from './model';
+import {Form, FormComponent, FormRow} from './model/model';
 import {ConverterService} from './converter.service';
 import * as _ from 'lodash';
 import {TdDynamicFormsComponent} from '@covalent/dynamic-forms';
 import uuidv1 from 'uuid/v1';
-import {DefaultForm} from './config';
 import {FormBuilder, FormGroup} from '@angular/forms';
+import {classToPlain, plainToClass} from 'class-transformer';
+import {DefaultForm} from './model/impl';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,8 @@ export class AppComponent implements OnInit {
   selectedComponent: FormComponent = null;
 
   importForm: FormGroup;
+
+  exportJson = '';
 
   constructor(public editorService: EditorService,
               public converterService: ConverterService,
@@ -52,6 +55,8 @@ export class AppComponent implements OnInit {
     clonedRow.uuid = uuidv1();
     this.form.rows.push(clonedRow);
     this.selectedRow = clonedRow;
+
+    this.refreshGeneratedCode();
   }
 
   addComponent(component: FormComponent) {
@@ -69,6 +74,8 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.selectedFormProperties.form.patchValue(this.form);
     });
+
+    this.refreshGeneratedCode();
   }
 
   selectComponent(component: FormComponent, row: FormRow) {
@@ -179,12 +186,15 @@ export class AppComponent implements OnInit {
     if (this.importForm.valid) {
       console.log('valid');
       const importedForm = JSON.parse(value['jsonDescriptor']);
-      this.form = importedForm;
+      this.form = plainToClass<Form, string>(DefaultForm, importedForm);
+      this.refreshGeneratedCode();
     }
   }
 
   // Code generation
   private refreshGeneratedCode() {
     this.converterService.convert(this.form);
+    // this.exportJson = JSON.stringify(classToPlain(this.form), undefined, 0);
+    this.exportJson = JSON.stringify((this.form), undefined, 0);
   }
 }

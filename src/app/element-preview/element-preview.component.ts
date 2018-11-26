@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormComponent} from '../model';
+import {FormComponent} from '../model/model';
 
 @Component({
   selector: 'app-element-preview',

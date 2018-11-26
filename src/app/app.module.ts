@@ -19,11 +19,15 @@ import {CovalentHighlightModule} from '@covalent/highlight';
 import {CovalentDynamicFormsModule} from '@covalent/dynamic-forms';
 import { ElementPreviewComponent } from './element-preview/element-preview.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { RemoveNewLinesPipe } from './shared/pipes/remove-new-lines.pipe';
+import { MinimiseJsonPipe } from './shared/pipes/minimise-json.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ElementPreviewComponent
+    ElementPreviewComponent,
+    RemoveNewLinesPipe,
+    MinimiseJsonPipe
   ],
   imports: [
     BrowserModule,

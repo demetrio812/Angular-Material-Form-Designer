@@ -25,21 +25,30 @@ export interface FormComponent {
   name: string;
   text: string;
   flex?: string;
+  flexFill?: boolean;
 
   configProperties: ITdDynamicElementConfig[];
 
-  extraCode?: (ctx: FormComponent) => string;
-  htmlCode?: (ctx: FormComponent) => string;
+  // extraCode?: (ctx: FormComponent) => string;
+  // htmlCode?: (ctx: FormComponent) => string;
 }
 
 export interface FormInputComponent extends FormComponent {
+  required: boolean;
   validators?: Array<FormInputValidator>;
-  formBuilderCode?: (ctx: FormComponent) => string;
+  // formBuilderCode?: (ctx: FormComponent) => string;
 }
 
 export interface FormInputValidator {
   type: string;
   value: string;
   code?: (ctx: FormComponent) => string;
-  htmlCode?: (ctx: FormComponent) => string;
+  // htmlCode?: (ctx: FormComponent) => string;
+}
+
+export interface ComponentConverter<CLASS> {
+  type: string;
+  formBuilderCode?: (ctx: CLASS) => string;
+  extraCode?: (ctx: CLASS) => string;
+  htmlCode?: (ctx: CLASS) => string;
 }

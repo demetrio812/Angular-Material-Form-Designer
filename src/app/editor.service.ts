@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
-import {Config} from './config';
-import {FormComponent, FormRow} from './model';
+import {Config} from './model/config';
+import {ComponentConverter, FormComponent, FormRow} from './model/model';
+import {
+  ButtonComponentConverter,
+  FormInputComponentConverter,
+  FormSelectComponentConverter,
+  FormTextAreaComponentConverter
+} from './model/converters';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +24,13 @@ export class EditorService {
     Config.button
   ];
 
+  private _converters: Array<ComponentConverter<FormComponent>> = [
+    new FormInputComponentConverter(),
+    new FormTextAreaComponentConverter(),
+    new FormSelectComponentConverter(),
+    new ButtonComponentConverter()
+  ];
+
   constructor() {
 
   }
@@ -28,5 +41,13 @@ export class EditorService {
 
   get components() {
     return this._components;
+  }
+
+  get converters() {
+    return this._converters;
+  }
+
+  getConverterForType(type: string) {
+    return this.converters.find(conv => conv.type === type);
   }
 }
