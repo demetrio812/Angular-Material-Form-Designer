@@ -4,6 +4,32 @@ import {DefaultFormRow} from './impl';
 
 export class Config {
 
+  static formComponentDefaultConfigProperties: ITdDynamicElementConfig[] = [
+    {
+      name: 'name',
+      label: 'Name',
+      type: TdDynamicElement.Input
+    },
+    {
+      name: 'text',
+      label: 'Text',
+      type: TdDynamicElement.Input,
+      required: false
+    },
+    {
+      name: 'flex',
+      label: 'Flex',
+      type: TdDynamicElement.Input,
+      hint: 'i.e. 50%',
+      required: false
+    },
+    {
+      name: 'flexFill',
+      label: 'Flex fill',
+      type: TdDynamicElement.Checkbox,
+      default: false,
+      required: false
+    }];
 
   static formInputComponentDefaultConfigProperties: ITdDynamicElementConfig[] = [
     {
@@ -148,7 +174,7 @@ export class Config {
     text: 'myButton',
     flex: 'none',
     flexFill: false,
-    configProperties: Config.formInputComponentDefaultConfigProperties,
+    configProperties: Config.formComponentDefaultConfigProperties,
     /*extraCode: (ctx: FormComponent) => {
       return `${ctx.name}Clicked() {\n   console.log('${ctx.name} clicked');\n}`;
     },

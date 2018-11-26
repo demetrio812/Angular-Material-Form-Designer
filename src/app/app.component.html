@@ -178,27 +178,29 @@
                [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlignMainAxis + (row.fxLayoutAlignCrossAxis ? ' ' + row.fxLayoutAlignCrossAxis : '')" [fxLayoutGap]="row.fxLayoutGap"
                *ngFor="let row of form.rows">
 
-            <div class="element-layout" [ngClass]="{'selected': element == selectedComponent}" [fxFlex]="element.flex" *ngFor="let element of row.components" (click)="selectComponent(element, row)">
-              {{element.name}} ({{element.text}})
+            <div class="element-layout"
+                 [ngClass]="{'selected': element == selectedComponent, 'flex-fill-css': element.flexFill}"
+                 [fxFlex]="element.flex" *ngFor="let element of row.components"
+                 (click)="selectComponent(element, row)">
+              {{element.name}} ({{element.text}}) <span *ngIf="element.required">(R)</span>
             </div>
           </div>
 
         </mat-tab>
         <mat-tab label="Preview">
 
-          <div [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlign" [fxLayoutGap]="row.fxLayoutGap"
+          <div [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlignMainAxis + (row.fxLayoutAlignCrossAxis ? ' ' + row.fxLayoutAlignCrossAxis : '')" [fxLayoutGap]="row.fxLayoutGap"
                class="preview-container" *ngFor="let row of form.rows">
 
             <ng-container [ngSwitch]="element.type" *ngFor="let element of row.components">
-              <mat-form-field [fxFlex]="element.flex" *ngSwitchCase="'input' && !element.flexFill"><input matInput placeholder="{{element.text}}"></mat-form-field>
-              <mat-form-field [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'input' && element.flexFill"><input matInput placeholder="{{element.text}}"></mat-form-field>
-              <mat-form-field [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'textarea'"><textarea matInput placeholder="{{element.text}}"></textarea></mat-form-field>
-              <mat-select [fxFlex]="element.flex" fxFlexFill *ngSwitchCase="'select'" placeholder="{{element.text}}">
+              <mat-form-field [fxFlex]="element.flex" [ngClass]="{'flex-fill-css': element.flexFill}" *ngSwitchCase="'input'"><input matInput placeholder="{{element.text}}"></mat-form-field>
+              <mat-form-field [fxFlex]="element.flex" [ngClass]="{'flex-fill-css': element.flexFill}" *ngSwitchCase="'textarea'"><textarea matInput placeholder="{{element.text}}"></textarea></mat-form-field>
+              <mat-select [fxFlex]="element.flex" [ngClass]="{'flex-fill-css': element.flexFill}" *ngSwitchCase="'select'" placeholder="{{element.text}}">
                 <mat-option>One</mat-option>
                 <mat-option>Two</mat-option>
                 <mat-option>Three</mat-option>
               </mat-select>
-              <button *ngSwitchCase="'button'" [fxFlex]="element.flex" mat-raised-button color='primary' >{{element.text}}</button>
+              <button *ngSwitchCase="'button'" [fxFlex]="element.flex" [ngClass]="{'flex-fill-css': element.flexFill}" mat-raised-button color='primary' >{{element.text}}</button>
               <div *ngSwitchDefault>(element)</div>
             </ng-container>
 
