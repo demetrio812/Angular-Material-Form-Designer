@@ -31,6 +31,7 @@ export class ConverterService {
     let code =
 `
 ${form.name}: FormGroup;
+${form.name}Submitted = false;
 
 constructor(private fb: FormBuilder) {
     this.${form.name}Setup();
@@ -65,10 +66,10 @@ private ${form.name}Setup(): void {
   }
 
   private getHtmlCode(form: Form): string {
-    let code = `\n<form [formGroup]=\'${form.name}\'>\n`;
+    let code = `\n<form [formGroup]=\"${form.name}\" (submit)="${form.name}Clicked()">\n`;
 
     for (const row of form.rows) {
-      code += `\n<div fxLayout='${row.fxLayout ? row.fxLayout : 'row'} ${row.fxLayoutWrap ? 'wrap' : ''}' fxLayoutAlign='${row.fxLayoutAlignMainAxis ? row.fxLayoutAlignMainAxis : 'space-around'} ${row.fxLayoutAlignCrossAxis ? row.fxLayoutAlignCrossAxis : 'center'}'>\n`;
+      code += `\n<div fxLayout="${row.fxLayout ? row.fxLayout : 'row'} ${row.fxLayoutWrap ? 'wrap' : ''}" fxLayoutAlign="${row.fxLayoutAlignMainAxis ? row.fxLayoutAlignMainAxis : 'space-around'} ${row.fxLayoutAlignCrossAxis ? row.fxLayoutAlignCrossAxis : 'center'}">\n`;
       for (const component of row.components) {
         const converter = this.getConverterForType(component.type);
         if (converter.htmlCode) {

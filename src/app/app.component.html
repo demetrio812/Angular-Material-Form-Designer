@@ -71,8 +71,8 @@
 
         <div fxLayout="column">
           <!--<pre>{{selectedComponent | json}}</pre>-->
-          <td-dynamic-forms #selectedFormProperties [elements]="form.configProperties">
-            <ng-template let-element ngFor [ngForOf]="form.configProperties">
+          <td-dynamic-forms #selectedFormProperties [elements]="selectedForm.configProperties">
+            <ng-template let-element ngFor [ngForOf]="selectedForm.configProperties">
               <ng-template let-control="control" [tdDynamicFormsError]="element.name">
                 <span *ngIf="control.touched || !control.pristine">
                   <span *ngIf="control.hasError('required')">Required</span>
@@ -176,7 +176,7 @@
 
           <div class="row-layout" [ngClass]="{'selected': row == selectedRow}"
                [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlignMainAxis + (row.fxLayoutAlignCrossAxis ? ' ' + row.fxLayoutAlignCrossAxis : '')" [fxLayoutGap]="row.fxLayoutGap"
-               *ngFor="let row of form.rows">
+               *ngFor="let row of selectedForm.rows">
 
             <div class="element-layout"
                  [ngClass]="{'selected': element == selectedComponent, 'flex-fill-css': element.flexFill}"
@@ -190,7 +190,7 @@
         <mat-tab label="Preview">
 
           <div [fxLayout]="row.fxLayout" [fxLayoutAlign]="row.fxLayoutAlignMainAxis + (row.fxLayoutAlignCrossAxis ? ' ' + row.fxLayoutAlignCrossAxis : '')" [fxLayoutGap]="row.fxLayoutGap"
-               class="preview-container" *ngFor="let row of form.rows">
+               class="preview-container" *ngFor="let row of selectedForm.rows">
 
             <ng-container [ngSwitch]="element.type" *ngFor="let element of row.components">
               <mat-form-field [fxFlex]="element.flex" [ngClass]="{'flex-fill-css': element.flexFill}" *ngSwitchCase="'input'"><input matInput placeholder="{{element.text}}"></mat-form-field>

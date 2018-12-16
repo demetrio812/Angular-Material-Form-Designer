@@ -19,7 +19,9 @@ export class AppComponent implements OnInit {
   @ViewChild('selectedRowProperties') selectedRowProperties: TdDynamicFormsComponent;
   @ViewChild('selectedComponentProperties') selectedComponentProperties: TdDynamicFormsComponent;
 
-  form: DefaultForm = new DefaultForm();
+  savedForms: DefaultForm[];
+
+  selectedForm: DefaultForm;
   selectedRow: FormRow = null;
   selectedComponent: FormComponent = null;
 
@@ -35,7 +37,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setFormValues();
+    this.loadAllSavedForms();
+    if (!this.savedForms) {
+      this.savedForms = [new DefaultForm()];
+    }
+    this.selectedForm = this.savedForms[0]; // first selectedForm automatically selected
+    this.setCurrentFormValues();
 
     // test
     const row = this.editorService.containers[0];
@@ -53,7 +60,7 @@ export class AppComponent implements OnInit {
   addRow(row: FormRow) {
     const clonedRow = _.cloneDeep(row);
     clonedRow.uuid = uuidv1();
-    this.form.rows.push(clonedRow);
+    this.selectedForm.rows.push(clonedRow);
     this.selectedRow = clonedRow;
 
     this.refreshGeneratedCode();
@@ -70,9 +77,9 @@ export class AppComponent implements OnInit {
     }
   }
 
-  setFormValues() {
+  setCurrentFormValues() {
     setTimeout(() => {
-      this.selectedFormProperties.form.patchValue(this.form);
+      this.selectedFormProperties.form.patchValue(this.selectedForm);
     });
 
     this.refreshGeneratedCode();
@@ -84,15 +91,15 @@ export class AppComponent implements OnInit {
 
     this.changeDetectorRef.detectChanges();
 
-    // I have to set the values after the form elements are refreshed (after the detect changes cycle)
+    // I have to set the values after the selectedForm elements are refreshed (after the detect changes cycle)
     setTimeout(() => {
       if (this.selectedRowProperties) {
-        // console.log('Patching form row ' + row.type);
+        // console.log('Patching selectedForm row ' + row.type);
         this.selectedRowProperties.form.patchValue(row);
       }
 
       if (this.selectedComponentProperties) {
-        // console.log('Patching form component ' + component.name);
+        // console.log('Patching selectedForm component ' + component.name);
         this.selectedComponentProperties.form.patchValue(component);
       }
     });
@@ -109,8 +116,8 @@ export class AppComponent implements OnInit {
 
     const me = this;
     Object.keys(value).forEach(name => {
-      if (me.form[name] !== undefined) {
-        me.form[name] = value[name];
+      if (me.selectedForm[name] !== undefined) {
+        me.selectedForm[name] = value[name];
       }
     });
 
@@ -151,15 +158,15 @@ export class AppComponent implements OnInit {
 
   clearForm() {
     this.deselectComponent();
-    this.form = new DefaultForm();
+    this.selectedForm = new DefaultForm();
 
     this.refreshGeneratedCode();
   }
 
 
   deleteRow() {
-    const idx = this.form.rows.findIndex(row => row.uuid === this.selectedRow.uuid);
-    this.form.rows.splice(idx, 1);
+    const idx = this.selectedForm.rows.findIndex(row => row.uuid === this.selectedRow.uuid);
+    this.selectedForm.rows.splice(idx, 1);
     this.deselectComponent();
 
     this.refreshGeneratedCode();
@@ -186,15 +193,24 @@ export class AppComponent implements OnInit {
     if (this.importForm.valid) {
       console.log('valid');
       const importedForm = JSON.parse(value['jsonDescriptor']);
-      this.form = plainToClass<Form, string>(DefaultForm, importedForm);
+      this.selectedForm = plainToClass<Form, string>(DefaultForm, importedForm);
       this.refreshGeneratedCode();
     }
   }
 
+  loadAllSavedForms() {
+    const formsJson = localStorage.getItem('forms-data');
+    // this.savedForms = plainToClass<DefaultForm[], string>(DefaultForm[], formsJson);
+  }
+
+  saveAllSavedForms() {
+    localStorage.setItem('forms-data', JSON.stringify(this.savedForms));
+  }
+
   // Code generation
   private refreshGeneratedCode() {
-    this.converterService.convert(this.form);
-    // this.exportJson = JSON.stringify(classToPlain(this.form), undefined, 0);
-    this.exportJson = JSON.stringify((this.form), undefined, 0);
+    this.converterService.convert(this.selectedForm);
+    // this.exportJson = JSON.stringify(classToPlain(this.selectedForm), undefined, 0);
+    this.exportJson = JSON.stringify((this.selectedForm), undefined, 0);
   }
 }
